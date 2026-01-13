@@ -1,6 +1,6 @@
 import { JsonPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators, ɵInternalFormsSharedModule } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators, ɵInternalFormsSharedModule } from '@angular/forms';
 import { FormUtils } from '../../../utils/form-utils';
 
 @Component({
@@ -24,30 +24,29 @@ export class DynamicPageComponent {
     ),
   });
 
+  newFavorite = new FormControl('', Validators.required);
+
   get favoriteGames() {
     return this.myForm.get('favoriteGames') as FormArray;
   }
 
-  //
+  onAddToFavorites() {
+    if (this.newFavorite.invalid) return;
 
+    const newGame = this.newFavorite.value;
+    this.favoriteGames.push(this.fb.control(newGame, Validators.required))
 
-  getFieldError11(formArray:FormArray,fieldName: string): string | null {
-    if (!this.myForm.controls[fieldName]) return null;
+    this.newFavorite.reset();
+  }
 
-    const errors = this.myForm.controls[fieldName].errors ?? {};
+  onDeleteFavorite(index: number) {
+    this.favoriteGames.removeAt(index);
+  }
 
-    for (const key of Object.keys(errors)) {
-      switch (key) {
-        case 'required':
-          return 'Este campo es requerido';
+  onSubmit() {
+    console.log(this.myForm.value);
 
-        case 'minlength':
-          return `Minimo de ${errors['minlength'].requiredLength} caracteres.`;
-
-        case 'min':
-          return `Valor minimo de ${errors['min'].min}`
-      }
-    }
-    return null;
+    this.myForm.markAllAsTouched();
+    //this.myForm.reset();
   }
 }
