@@ -5,8 +5,5 @@ import { Component } from '@angular/core';
   selector: 'app-register-page',
   imports: [JsonPipe],
   templateUrl: './register-page.component.html',
-  styleUrl: './register-page.component.css'
 })
-export class RegisterPageComponent {
-
-}
+export class RegisterPageComponent {}

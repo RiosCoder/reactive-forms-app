@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { reactiveRoutes } from '../../../reactive/reactive.routes';
-import { RouterLink, RouterLinkActive } from "@angular/router";
+import { RouterLink, RouterLinkActive } from '@angular/router';
 
 interface MenuItem {
   title: string;
@@ -13,7 +13,6 @@ const reactiveItems = reactiveRoutes[0].children ?? [];
   selector: 'app-side-menu',
   imports: [RouterLink, RouterLinkActive],
   templateUrl: './side-menu.component.html',
-  styleUrl: './side-menu.component.css'
 })
 export class SideMenuComponent {
   reactiveMenu: MenuItem[] = reactiveItems
@@ -27,13 +26,13 @@ export class SideMenuComponent {
     {
       title: 'Registro',
       route: './auth',
-    }
-  ]
+    },
+  ];
 
-  country: MenuItem[] = [
+  countryMenu: MenuItem[] = [
     {
-      title: 'Paises',
+      title: 'Países',
       route: './country',
-    }
-  ]
+    },
+  ];
 }
