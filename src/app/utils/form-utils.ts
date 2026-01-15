@@ -37,6 +37,9 @@ export class FormUtils {
         case 'emailTaken':
           return `El correo electronico ya esta siendo usado por otro usuario`;
 
+        case 'noStrider':
+          return `No se puede usar el username de strider en la app`;
+
         case 'pattern':
           if (errors['pattern'].requiredPattern === FormUtils.emailPattern)
             return 'El valor ingresado no luce como un correo electronico.';
@@ -102,6 +105,18 @@ export class FormUtils {
     }
     return null;
   }
-}
 
-// FormUtils.isValidField()
+  /**realizar validacion para username, en el caso que exista ya uno
+   *la validacion sera sincrono, es decir se validara cuando se envie el formulario
+   */
+  static notStrider(control: AbstractControl): ValidationErrors | null {
+    const formValue = control.value;
+
+    if (formValue === 'strider') {
+      return {
+        noStrider: true,
+      };
+    }
+    return null;
+  }
+}

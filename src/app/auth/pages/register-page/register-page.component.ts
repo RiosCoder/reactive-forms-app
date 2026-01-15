@@ -5,7 +5,7 @@ import {
   FormGroup,
   ReactiveFormsModule,
   Validators,
-  ɵInternalFormsSharedModule
+  ɵInternalFormsSharedModule,
 } from '@angular/forms';
 import { FormUtils } from '../../../utils/form-utils';
 
@@ -27,7 +27,7 @@ export class RegisterPageComponent {
       email: [
         '',
         [Validators.required, Validators.pattern(this.formUtils.emailPattern)],
-        [this.formUtils.checkingServerResponse]
+        [this.formUtils.checkingServerResponse],
       ],
       username: [
         '',
@@ -35,13 +35,14 @@ export class RegisterPageComponent {
           Validators.required,
           Validators.minLength(6),
           Validators.pattern(this.formUtils.notOnlySpacesPattern),
+          this.formUtils.notStrider,
         ],
       ],
       password: ['', [Validators.required, Validators.minLength(6)]],
       password2: ['', Validators.required],
     },
     {
-      validators: [
+      Validators: [
         this.formUtils.isFieldOneEqualFieldTwo('password', 'password2'),
       ],
     }
