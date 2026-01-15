@@ -1,12 +1,11 @@
 import { JsonPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import {
-  AbstractControl,
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
   Validators,
-  ɵInternalFormsSharedModule,
+  ɵInternalFormsSharedModule
 } from '@angular/forms';
 import { FormUtils } from '../../../utils/form-utils';
 
@@ -28,6 +27,7 @@ export class RegisterPageComponent {
       email: [
         '',
         [Validators.required, Validators.pattern(this.formUtils.emailPattern)],
+        [this.formUtils.checkingServerResponse]
       ],
       username: [
         '',

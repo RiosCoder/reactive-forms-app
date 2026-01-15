@@ -1,4 +1,17 @@
-import { AbstractControl, FormArray, FormGroup, ValidationErrors } from '@angular/forms';
+import {
+  AbstractControl,
+  FormArray,
+  FormGroup,
+  ValidationErrors,
+} from '@angular/forms';
+
+async function sleep() {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(true);
+    }, 2500);
+  });
+}
 
 export class FormUtils {
   // Expresiones regulares
@@ -7,9 +20,6 @@ export class FormUtils {
   static notOnlySpacesPattern = '^[a-zA-Z0-9]+$';
 
   static getTextError(errors: ValidationErrors) {
-
-
-
     for (const key of Object.keys(errors)) {
       switch (key) {
         case 'required':
@@ -24,10 +34,13 @@ export class FormUtils {
         case 'email':
           return `El valor ingresado no es un correo electronico.`;
 
+        case 'emailTaken':
+          return `El correo electronico ya esta siendo usado por otro usuario`;
+
         case 'pattern':
           if (errors['pattern'].requiredPattern === FormUtils.emailPattern)
-            return 'El valor ingresado no luce como un correo electronico.'
-          return 'Error de patron contra expresion regular'
+            return 'El valor ingresado no luce como un correo electronico.';
+          return 'Error de patron contra expresion regular';
 
         default:
           `Error de validación no controlado`;
@@ -77,6 +90,18 @@ export class FormUtils {
     };
   }
 
+  static async checkingServerResponse(
+    control: AbstractControl
+  ): Promise<ValidationErrors | null> {
+    await sleep(); //espera 2 segundos y medio
+    const formValue = control.value;
+    if (formValue === 'hola@mundo.com') {
+      return {
+        emailTaken: true,
+      };
+    }
+    return null;
+  }
 }
 
 // FormUtils.isValidField()
