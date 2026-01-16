@@ -32,21 +32,23 @@ export class FormUtils {
           return `Valor mínimo de ${errors['min'].min}`;
 
         case 'email':
-          return `El valor ingresado no es un correo electronico.`;
+          return `El valor ingresado no es un correo electrónico`;
 
         case 'emailTaken':
-          return `El correo electronico ya esta siendo usado por otro usuario`;
+          return `El correo electrónico ya está siendo usado por otro usuario`;
 
         case 'noStrider':
           return `No se puede usar el username de strider en la app`;
 
         case 'pattern':
-          if (errors['pattern'].requiredPattern === FormUtils.emailPattern)
-            return 'El valor ingresado no luce como un correo electronico.';
-          return 'Error de patron contra expresion regular';
+          if (errors['pattern'].requiredPattern === FormUtils.emailPattern) {
+            return 'El valor ingresado no luce como un correo electrónico';
+          }
+
+          return 'Error de patrón contra expresión regular';
 
         default:
-          `Error de validación no controlado`;
+          return `Error de validación no controlado ${key}`;
       }
     }
 
@@ -96,27 +98,24 @@ export class FormUtils {
   static async checkingServerResponse(
     control: AbstractControl
   ): Promise<ValidationErrors | null> {
-    await sleep(); //espera 2 segundos y medio
+    console.log('Validando contra servidor');
+
+    await sleep(); // 2 segundos y medio
+
     const formValue = control.value;
+
     if (formValue === 'hola@mundo.com') {
       return {
         emailTaken: true,
       };
     }
+
     return null;
   }
 
-  /**realizar validacion para username, en el caso que exista ya uno
-   *la validacion sera sincrono, es decir se validara cuando se envie el formulario
-   */
   static notStrider(control: AbstractControl): ValidationErrors | null {
-    const formValue = control.value;
+    const value = control.value;
 
-    if (formValue === 'strider') {
-      return {
-        noStrider: true,
-      };
-    }
-    return null;
+    return value === 'strider' ? { noStrider: true } : null;
   }
 }
