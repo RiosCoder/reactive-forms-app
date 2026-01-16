@@ -9,7 +9,7 @@ import {
 import { JsonPipe } from '@angular/common';
 import { Country } from '../../interfaces/country-interface';
 import { LocationUpgradeModule } from '@angular/common/upgrade';
-import { switchMap, tap } from 'rxjs';
+import { filter, switchMap, tap } from 'rxjs';
 
 @Component({
   selector: 'app-country-page',
@@ -33,10 +33,11 @@ export class CountryPageComponent {
   //para limpiar los campos cuando cambiamos de componente
   onFormChanged = effect((onCleanup) => {
     const regionSubscription = this.onRegionChanged();
+    const countrySubscription = this.onCountryChanged();
 
     onCleanup(() => {
       regionSubscription.unsubscribe();
-      console.log('limpiado');
+      countrySubscription.unsubscribe();
     });
   });
 
@@ -61,6 +62,26 @@ export class CountryPageComponent {
         console.log(countries);
 
         this.countriesByRegion.set(countries);
+      });
+  }
+
+  onCountryChanged() {
+    return this.myForm
+      .get('country')!
+      .valueChanges.pipe(
+        tap(() => this.myForm.get('border')!.setValue('')),
+        filter((value) => value!.length > 0),
+        switchMap((alphaCode) =>
+          this.countryService.getCountryByAlphaCode(alphaCode ?? '')
+        ),
+        switchMap((country) =>
+          this.countryService.getCountryNamesByCodeArray(country.borders)
+        )
+      )
+
+      .subscribe((borders) => {
+        console.log({ borders });
+        this.borders.set(borders);
       });
   }
 }
